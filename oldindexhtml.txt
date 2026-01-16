@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon"
+        href="https://images.sftcdn.net/images/t_app-icon-m/p/8edd3e32-9b27-11e6-9fa3-00163ec9f5fa/96848193/olx-logo"
+        type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.acernity-ui.com/acernity.min.css">
+    <script src="https://cdn.acernity-ui.com/acernity.min.js"></script>
+
+    
+    <title>Online Exchange</title>
+
+</head>
+
+<body>
+    <div class="mega-container">
+        <nav>
+            <div class="logo-box">
+                XCHANGE
+            </div>
+            <div class="route-link-box">
+                <div class="route-link"><a href="HOME.html">HOME</a></div>
+                <div class="route-link"><a href="HOME.html">BUY/SELL</a></div>
+                <div class="route-link"><a href="HOME.html">ABOUT</a></div>
+                <div class="route-link"><a href="HOME.html">CONTACT</a></div>
+            </div>
+            <div class="login-box-container">
+                <div class="button-box">
+                   <a href="loginpsge.html">LOGIN</a>
+                </div>
+                <div class="search-box">
+                    <img src="https://img.icons8.com/forma-bold/100/search.png" alt="" class="search-icon">
+                </div>
+            </div>
+        </nav>
+        <div class="empty-box"></div>
+        <div class="slogan-box">
+            BUY <br> & <br> SELL
+        </div>
+        <div class="slogan-mini-box" id="typewriter">
+            WITH EASE
+        </div>
+        <div class="button-box-container">
+            <div class="button-box-holder">
+                <div class="button-box">
+                    EXPLORE NOW >
+                </div>
+                <div class="button-box">
+                    START SELLING >
+                </div>
+            </div>
+        </div>
+<div id="des">            Discover amazing deals on secaond-hand cars, bikes, electronics, and more. Start selling or find the perfect
+            product today!
+</div>
+
+<div class="ne">
+    <p>AFFORDABLE</p>
+    <p>EXCHANGE</p>
+    <p>CONNECTING</p>
+    <p>SUSTAINABILITY</p>
+</div>
+<div class="acernity-container">
+    <!-- Heading -->
+    <h1 class="acernity-heading">Welcome to Acerinity UI</h1>
+    
+    <!-- Button -->
+    <button class="acernity-btn acernity-btn-primary">
+        Click Me
+    </button>
+    
+    <!-- Card -->
+    <div class="acernity-card">
+        <div class="acernity-card-header">
+            Featured
+        </div>
+        <div class="acernity-card-body">
+            <h5 class="acernity-card-title">Acerinity UI Card</h5>
+            <p class="acernity-card-text">
+                This is a simple card using Acerinity UI. It's clean and minimal.
+            </p>
+            <a href="#" class="acernity-btn acernity-btn-secondary">Learn More</a>
+        </div>
+    </div>
+</div>
+ </div>
+    <!-- <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>We are a platform that connects buyers and sellers, promoting affordability and sustainability.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="https://tally.so/r/w2l8Jg">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                
+                <h4>CONTACT US</h4>
+                <p>Email: support@example.com</p>
+                <p>Phone: +1 123 456 7890</p>
+                <p>Address: 123 Main Street, City, Country</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Your Website. All rights reserved.</p>
+        </div>
+    </footer> -->
+
+    
+ <script src="script.js"></script>
+</body>
+
+</html>

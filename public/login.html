@@ -1,0 +1,198 @@
+<html>
+ <head>
+  <title>
+   Login Page
+  </title>
+  <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .login-container .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .login-container .remember-me a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .login-container .login-btn {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-container .login-btn:hover {
+            background-color: #218838;
+        }
+        .login-container .social-login {
+            margin: 20px 0;
+        }
+        .login-container .social-login button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-container .social-login button i {
+            margin-right: 10px;
+        }
+        .login-container .social-login .google-btn {
+            background-color: #fff;
+            color: #000;
+        }
+        .login-container .social-login .facebook-btn {
+            background-color: #3b5998;
+            color: #fff;
+        }
+  </style>
+ </head>
+ <body>
+  <div class="login-container">
+   <img alt="Login illustration" height="100" src="https://storage.googleapis.com/a1aa/image/FyrwlpgpzT6fdKjCgtDMVNbcxRFr4AaLDubpsmXSQcbDMuBKA.jpg" width="100"/>
+   <h2>
+    Login
+   </h2>
+   <input id="email" placeholder="Email ID" type="text"/>
+   <input id="password" placeholder="Password" type="password"/>
+   <div class="remember-me">
+    <a href="signup.html">
+        Register 
+       </a>
+    <label>
+     <input type="checkbox" id="rememberMe"/>
+     Remember me
+    </label>
+    
+    <!-- <a href="#">
+     Forgot Password?
+    </a> -->
+   </div>
+   <button class="login-btn" onclick="loginUser()">
+    Login
+   </button>
+   <div class="social-login">
+    <p>
+     Or login with
+    </p>
+    <a href="http://localhost:5000/auth/google">
+        <button class="google-btn" id="googleSignIn">
+            <i class="fab fa-google">
+            </i>
+            Google
+           </button>
+    </a>
+    <!-- <button class="facebook-btn" href="signup.html">
+     <i class="fab fa-facebook-f">
+     </i>
+     SIGN UP    
+    </button> -->
+   </div>
+  </div> 
+  <!-- <script>
+    async function loginUser() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const rememberMe = document.getElementById("rememberMe").checked;
+
+
+        if (!email || !password) {
+            alert("Please enter email and password");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                    if (rememberMe) {
+                        localStorage.setItem("token", data.token);
+                    } else {
+                        sessionStorage.setItem("token", data.token);
+                    }
+                    alert("Login Successful");
+                    window.location.href = "profile.html";
+                } else {
+                    alert(data.error);
+                }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+        }
+    }
+    document.getElementById("googleSignIn").addEventListener("click", () => {
+            window.open("https://accounts.google.com/signin", "_blank");
+        });
+    // Login API Response Handle
+fetch('http://localhost:5000/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.token) {
+        localStorage.setItem('user', JSON.stringify(data.user));  // ✅ Save user data
+        localStorage.setItem('token', data.token);  // ✅ Save token
+        window.location.href = '/profile.html';  // ✅ Redirect to profile page
+    } else {
+        alert("❌ Invalid credentials");
+    }
+})
+.catch(error => console.error("❌ Login Error:", error));
+
+  </script> -->
+  <script src="login.js"></script>
+
+ </body>
+</html>
+

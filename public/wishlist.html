@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>My Wishlist</h2>
+    <div class="wishlist-container">
+        <% if (wishlist.length > 0) { %>
+            <% wishlist.forEach(product => { %>
+                <div class="product-card">
+                    <img src="<%= product.image %>" alt="<%= product.name %>">
+                    <h3><%= product.name %></h3>
+                    <p>Price: ₹<%= product.price %></p>
+                    <button onclick="addToCart('<%= product._id %>')">Add to Cart</button>
+                    <button onclick="removeFromWishlist('<%= product._id %>')">Remove</button>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>Your wishlist is empty!</p>
+        <% } %>
+    </div>
+
+    <script>
+        function addToCart(productId) {
+            fetch('/add-to-cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId })
+            }).then(() => location.reload());
+        }
+
+        function removeFromWishlist(productId) {
+            fetch('/remove-from-wishlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId })
+            }).then(() => location.reload());
+        }
+    </script>
+</body>
+</html>

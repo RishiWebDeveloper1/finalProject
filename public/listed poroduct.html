@@ -1,0 +1,291 @@
+
+// document.addEventListener("DOMContentLoaded", function() {
+    //     // Check if user is logged in
+    //     const user = JSON.parse(localStorage.getItem('user'));
+    //     if (!user) {
+    //         window.location.href = 'login.html';
+    //         return;
+    //     }
+        
+    //     // DOM Elements
+    //     const productsContainer = document.getElementById('productsContainer');
+    //     const productModal = document.getElementById('productModal');
+    //     const deleteModal = document.getElementById('deleteModal');
+    //     const notification = document.getElementById('notification');
+    //     const productForm = document.getElementById('productForm');
+    //     const imagePreview = document.getElementById('imagePreview');
+    //     const productImage = document.getElementById('productImage');
+    //     const modalTitle = document.getElementById('modalTitle');
+    //     const addProductBtn = document.getElementById('addProductBtn');
+        
+    //     let currentProductId = null;
+        
+    //     // Load products
+    //     loadProducts();
+        
+    //     // Event Listeners
+    //     addProductBtn.addEventListener('click', () => openAddProductModal());
+        
+    //     document.querySelectorAll('.close-btn, .cancel-btn').forEach(btn => {
+    //         btn.addEventListener('click', () => {
+    //             productModal.style.display = 'none';
+    //             deleteModal.style.display = 'none';
+    //         });
+    //     });
+        
+    //     productForm.addEventListener('submit', handleProductSubmit);
+        
+    //     productImage.addEventListener('change', function(e) {
+    //         displayImagePreview(e.target.files[0]);
+    //     });
+        
+    //     document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
+        
+    //     // Functions
+    //     async function loadProducts() {
+    //         try {
+    //             // Show loading spinner
+    //             productsContainer.innerHTML = `
+    //                 <div class="loading">
+    //                     <div class="loading-spinner"></div>
+    //                 </div>
+    //             `;
+                
+    //             // API call to get seller's products from MongoDB
+    //             const response = await fetch(`http://localhost:5000/api/products/seller/${user._id}`, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //                 }
+    //             });
+                
+    //             if (!response.ok) {
+    //                 throw new Error('Failed to load products');
+    //             }
+                
+    //             const products = await response.json();
+                
+    //             if (!products.length) {
+    //                 // Show empty state
+    //                 showEmptyState();
+    //                 return;
+    //             }
+                
+    //             // Render products
+    //             productsContainer.innerHTML = `
+    //                 <div class="product-grid">
+    //                     ${products.map(product => createProductCard(product)).join('')}
+    //                 </div>
+    //             `;
+                
+    //             // Add event listeners to edit and delete buttons
+    //             document.querySelectorAll('.edit-btn').forEach(btn => {
+    //                 btn.addEventListener('click', (e) => {
+    //                     const productId = e.target.dataset.id;
+    //                     openEditProductModal(productId);
+    //                 });
+    //             });
+                
+    //             document.querySelectorAll('.delete-btn').forEach(btn => {
+    //                 btn.addEventListener('click', (e) => {
+    //                     const productId = e.target.dataset.id;
+    //                     openDeleteModal(productId);
+    //                 });
+    //             });
+    //         } catch (error) {
+    //             console.error('Error loading products:', error);
+    //             productsContainer.innerHTML = `
+    //                 <div class="error-message">
+    //                     <p>Failed to load your products. Please try again later.</p>
+    //                     <button onclick="loadProducts()" class="btn-add-first">Retry</button>
+    //                 </div>
+    //             `;
+    //         }
+    //     }
+        
+    //     function createProductCard(product) {
+    //         return `
+    //             <div class="product-card" id="product-${product._id}">
+    //                 <div class="product-image">
+    //                     ${product.imageUrl ? 
+    //                         `<img src="${product.imageUrl}" alt="${product.name}">` : 
+    //                         `<span class="no-image">No image available</span>`}
+    //                 </div>
+    //                 <div class="product-details">
+    //                     <h3 class="product-title">${product.name}</h3>
+    //                     <div class="product-price">$${parseFloat(product.price).toFixed(2)}</div>
+    //                     <div class="product-description">${product.description || 'No description provided'}</div>
+    //                     <div class="product-actions">
+    //                         <button class="edit-btn" data-id="${product._id}">Edit</button>
+    //                         <button class="delete-btn" data-id="${product._id}">Delete</button>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         `;
+    //     }
+        
+    //     function showEmptyState() {
+    //         productsContainer.innerHTML = `
+    //             <div class="empty-state">
+    //                 <h3>No Products Yet</h3>
+    //                 <p>You haven't listed any products for sale yet.</p>
+    //                 <button class="btn-add-first" id="addFirstProduct">+ Add Your First Product</button>
+    //             </div>
+    //         `;
+            
+    //         document.getElementById('addFirstProduct').addEventListener('click', openAddProductModal);
+    //     }
+        
+    //     function openAddProductModal() {
+    //         // Reset form
+    //         productForm.reset();
+    //         imagePreview.innerHTML = '<span class="no-image">No image selected</span>';
+    //         modalTitle.textContent = 'Add New Product';
+    //         document.getElementById('productId').value = '';
+    //         currentProductId = null;
+            
+    //         // Show modal
+    //         productModal.style.display = 'flex';
+    //     }
+        
+    //     async function openEditProductModal(productId) {
+    //         try {
+    //             currentProductId = productId;
+                
+    //             // Fetch product details from MongoDB
+    //             const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+    //                 headers: {
+    //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //                 }
+    //             });
+                
+    //             if (!response.ok) {
+    //                 throw new Error('Failed to fetch product details');
+    //             }
+                
+    //             const product = await response.json();
+                
+    //             // Fill form with product data
+    //             document.getElementById('productId').value = product._id;
+    //             document.getElementById('productName').value = product.name;
+    //             document.getElementById('productPrice').value = product.price;
+    //             document.getElementById('productDescription').value = product.description || '';
+    //             document.getElementById('productCategory').value = product.category || '';
+                
+    //             // Update image preview if available
+    //             if (product.imageUrl) {
+    //                 imagePreview.innerHTML = `<img src="${product.imageUrl}" alt="${product.name}">`;
+    //             } else {
+    //                 imagePreview.innerHTML = '<span class="no-image">No image selected</span>';
+    //             }
+                
+    //             // Update modal title
+    //             modalTitle.textContent = 'Edit Product';
+                
+    //             // Show modal
+    //             productModal.style.display = 'flex';
+    //         } catch (error) {
+    //             console.error('Error fetching product details:', error);
+    //             showNotification('Failed to load product details', true);
+    //         }
+    //     }
+        
+    //     function openDeleteModal(productId) {
+    //         currentProductId = productId;
+    //         deleteModal.style.display = 'flex';
+    //     }
+        
+    //     async function handleProductSubmit(e) {
+    //         e.preventDefault();
+            
+    //         try {
+    //             // Create FormData object to handle file uploads
+    //             const formData = new FormData(productForm);
+                
+    //             // Set the API endpoint based on whether we're adding or editing
+    //             let url, method;
+                
+    //             if (currentProductId) {
+    //                 // Edit existing product
+    //                 url = `http://localhost:5000/api/products/${currentProductId}`;
+    //                 method = 'PUT';
+    //             } else {
+    //                 // Add new product
+    //                 url = 'http://localhost:5000/api/products';
+    //                 method = 'POST';
+                    
+    //                 // Add seller ID to form data
+    //                 formData.append('sellerId', user._id);
+    //             }
+                
+    //             // Send request to MongoDB
+    //             const response = await fetch(url, {
+    //                 method: method,
+    //                 body: formData,
+    //                 headers: {
+    //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //                 }
+    //             });
+                
+    //             if (!response.ok) {
+    //                 throw new Error('Failed to save product');
+    //             }
+                
+    //             // Reload products and close modal
+    //             loadProducts();
+    //             productModal.style.display = 'none';
+                
+    //             // Show notification
+    //             const message = currentProductId ? 'Product updated successfully!' : 'Product added successfully!';
+    //             showNotification(message);
+    //         } catch (error) {
+    //             console.error('Error saving product:', error);
+    //             showNotification('Failed to save product. Please try again.', true);
+    //         }
+    //     }
+        
+    //     async function confirmDelete() {
+    //         if (!currentProductId) return;
+            
+    //         try {
+    //             // Send delete request to MongoDB
+    //             const response = await fetch(`http://localhost:5000/api/products/${currentProductId}`, {
+    //                 method: 'DELETE',
+    //                 headers: {
+    //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
+    //                 }
+    //             });
+                
+    //             if (!response.ok) {
+    //                 throw new Error('Failed to delete product');
+    //             }
+                
+    //             // Reload products and close modal
+    //             loadProducts();
+    //             deleteModal.style.display = 'none';
+    //             showNotification('Product deleted successfully!');
+    //         } catch (error) {
+    //             console.error('Error deleting product:', error);
+    //             showNotification('Failed to delete product. Please try again.', true);
+    //         }
+    //     }
+        
+    //     function displayImagePreview(file) {
+    //         if (!file) return;
+            
+    //         const reader = new FileReader();
+    //         reader.onload = function(e) {
+    //             imagePreview.innerHTML = `<img src="${e.target.result}" alt="Image Preview">`;
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+        
+    //     function showNotification(message, isError = false) {
+    //         notification.textContent = message;
+    //         notification.className = isError ? 'notification error show' : 'notification show';
+            
+    //         setTimeout(() => {
+    //             notification.className = 'notification';
+    //         }, 3000);
+    //     }
+    // });
+    // Update loadProducts function

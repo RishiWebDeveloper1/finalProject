@@ -1,0 +1,130 @@
+<html>
+ <head>
+  <title>
+   Login Page
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container img {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .login-container .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .login-container .remember-me a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .login-container .login-btn {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-container .login-btn:hover {
+            background-color: #218838;
+        }
+        .login-container .social-login {
+            margin: 20px 0;
+        }
+        .login-container .social-login button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .login-container .social-login button i {
+            margin-right: 10px;
+        }
+        .login-container .social-login .google-btn {
+            background-color: #fff;
+            color: #000;
+        }
+        .login-container .social-login .facebook-btn {
+            background-color: #3b5998;
+            color: #fff;
+        }
+  </style>
+ </head>
+ <body>
+  <div class="login-container">
+   <img alt="Login illustration" height="100" src="https://storage.googleapis.com/a1aa/image/FyrwlpgpzT6fdKjCgtDMVNbcxRFr4AaLDubpsmXSQcbDMuBKA.jpg" width="100"/>
+   <h2>
+    Login
+   </h2>
+   <input placeholder="Email ID" type="text"/>
+   <input placeholder="Password" type="password"/>
+   <div class="remember-me">
+    <label>
+     <input type="checkbox"/>
+     Remember me
+    </label>
+    <a href="#">
+     Forgot Password?
+    </a>
+   </div>
+   <button class="login-btn">
+    Login
+   </button>
+   <div class="social-login">
+    <p>
+     Or login with
+    </p>
+    <button class="google-btn">
+     <i class="fab fa-google">
+     </i>
+     Google
+    </button>
+    <button class="facebook-btn">
+     <i class="fab fa-facebook-f">
+     </i>
+     Facebook
+    </button>
+   </div>
+  </div>
+ </body>
+</html>
+

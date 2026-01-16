@@ -1,0 +1,82 @@
+<div style="display: flex; align-items: center; gap: 10px; padding: 10px;">
+    <!-- Left Side Category -->
+    <div style="width: 150px; min-width: 150px; height: 300px; background: #333; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; border-radius: 10px;">
+        Categories
+    </div>
+
+    <!-- Scrolling Cards -->
+    <div style="width: 800px; overflow: hidden; position: relative; display: flex; align-items: center;">
+        <div id="cardContainer" style="display: flex; gap: 15px; width: max-content; transition: transform 0.5s ease-in-out;">
+            <!-- Initial 6 Images -->
+        </div>
+    </div>
+
+    <!-- Next Button -->
+    <button onclick="addCard()" style="width: 50px; height: 50px; background: black; color: white; font-size: 1.5rem; border: none; border-radius: 50%; cursor: pointer;">></button>
+</div>
+
+<script>
+    let scrollOffset = 0;
+    let imageIndex = 0;
+    
+    // Tere images
+    let imageUrls = [
+        "category-mages/electronics2-min.jpeg",
+        "category-mages/clothes1.jpeg",
+        "category-mages/foootwear2.jpeg",
+        "category-mages/books2-min.jpeg",
+        "category-mages/watches-min.jpeg",
+        "category-mages/sports-min.jpeg"
+    ];
+
+    function loadInitialCards() {
+        let container = document.getElementById('cardContainer');
+
+        imageUrls.forEach((src, index) => {
+            let newCard = createCard(src, index);
+            container.appendChild(newCard);
+        });
+    }
+
+    function createCard(imgSrc, index) {
+        let newCard = document.createElement('div');
+        newCard.style.width = "250px";
+        newCard.style.height = "300px";
+        newCard.style.borderRadius = "10px";
+        newCard.style.boxShadow = "2px 2px 10px rgba(0, 0, 0, 0.1)";
+        newCard.style.cursor = "pointer";
+        newCard.style.marginLeft = "15px";
+        newCard.onclick = () => redirectToCategory();
+
+        let img = document.createElement('img');
+        img.src = imgSrc;
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.borderRadius = "10px";
+        img.style.objectFit = "cover";
+
+        newCard.appendChild(img);
+        return newCard;
+    }
+
+    function addCard() {
+        let container = document.getElementById('cardContainer');
+
+        let newCard = createCard(imageUrls[imageIndex], imageIndex);
+        container.appendChild(newCard);
+
+        // Auto Scroll to Show New Card
+        scrollOffset += 265; // 250px (card width) + 15px (gap)
+        container.style.transform = `translateX(-${scrollOffset}px)`;
+
+        // Loop back to first image after 6th image
+        imageIndex = (imageIndex + 1) % imageUrls.length;
+    }
+
+    function redirectToCategory() {
+        window.location.href = "category.html";
+    }
+
+    // Load initial 6 images
+    loadInitialCards();
+</script>

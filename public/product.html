@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+
+    <link rel="stylesheet" href="product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            /* padding: 20px; */
+            /* background-color: #ffffff; */
+            /* max-width: 1300px; */
+        }
+        
+        .header {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
+            justify-content: space-evenly;
+            margin-top: 2%;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 3%;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-input:focus {
+            border-color: #aaa;
+        }
+        
+        .search-button {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .search-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: flex-start;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        
+        .product-card {
+            /* background: #ffffff; */
+            width: 300px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            margin-LEFT: 1%;
+        }
+        
+        .image-container {
+            border: 2px solid black;
+            border-right: 2px solid black;
+            border-radius: 10%;
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-details {
+            padding: 15px 0;
+        }
+        
+        .product-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0 0 5px 0;
+        }
+        
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 8px 0;
+            min-height: 20px;
+        }
+        
+        .product-price {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        
+        .product-age {
+            color: #666;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+        }
+        
+        .action-button {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 0;
+            width: 48%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .cart-button {
+            color: #333;
+            background-color: #f0f0f0;
+        }
+        
+        .cart-button.active {
+            color: white;
+            background-color: #000000;
+        }
+        
+        .share-button {
+            color: #333;
+        }
+        
+        .share-button:hover, .cart-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .cart-button.active:hover {
+            background-color: #333;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 10px 0;
+            width: 100%;
+        }
+        
+        .no-results {
+            width: 100%;
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        /* Cart styling */
+        .cart-nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-nav-icon {
+            font-size: 20px;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .cart-nav-icon:hover {
+            color: #000;
+        }
+
+        .cart-nav-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #000;
+            color: white;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Share dialog */
+        .share-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .share-dialog.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .share-dialog-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .share-dialog-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        .share-link-container {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .share-link-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
+        }
+        
+        .copy-link-button {
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .share-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 15px;
+        }
+        
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .share-option i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .close-dialog-button {
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .product-card {
+                width: calc(50% - 10px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .product-card {
+                width: 100%;
+            }
+            .search-container {
+                flex-direction: column;
+            }
+        }
+        @media (max-width: 768px) {
+            .logo-box {
+                width: calc(50% - 10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <nav>
+            <div class="nav-container">
+                <div class="logo-box">
+                    <a href="index.html">XCHANGE</a>
+                </div>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="route-link-box">
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="https://tally.so/r/w2l8Jg">Contact</a>
+                    <!-- Added cart button to navbar -->
+                    <div class="cart-nav-button" id="cart-nav-button">
+                        <i class="fas fa-shopping-cart cart-nav-icon"></i>
+                        <span class="cart-nav-count" id="cart-nav-count">0</span>
+                    </div>
+                </div>
+                <div class="login-box-container" id="login-buttons">
+                    <a href="login.html">Login</a>
+                    <a href="signup.html">Register</a>
+                </div>
+                <div class="profile-container" id="profile-container">
+                    <i class='fas fa-user-circle' id="profile-icon"></i>
+                    <div class="profile-dropdown">
+                        <a href="profile.html">My Profile</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" id="logout-btn">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="Search products..." />
+            <button id="search-button" class="search-button">Search</button>
+        </div>
+    </div>
+    
+    <div id="product-list" class="product-container">
+        <!-- Products will be populated here -->
+    </div>
+
+    <!-- Share dialog -->
+    <div id="share-dialog" class="share-dialog">
+        <div class="share-dialog-content">
+            <h3 class="share-dialog-title">Share this product</h3>
+            <div class="share-link-container">
+                <input type="text" id="share-link-input" class="share-link-input" readonly>
+                <button id="copy-link-button" class="copy-link-button">Copy</button>
+            </div>
+            <div class="share-options">
+                <div class="share-option" data-platform="facebook">
+                    <i class="fab fa-facebook"></i>
+                    <span>Facebook</span>
+                </div>
+                <div class="share-option" data-platform="twitter">
+                    <i class="fab fa-twitter"></i>
+                    <span>Twitter</span>
+                </div>
+                <div class="share-option" data-platform="whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </div>
+            </div>
+            <button id="close-dialog-button" class="close-dialog-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>We are a platform that connects buyers and sellers, promoting affordability and sustainability.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="https://tally.so/r/w2l8Jg">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: support@exchange.com</p>
+                <p>Address: online</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Your Website. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="product.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+        .profile-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .products, .cart {
+            margin-top: 20px;
+        }
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: red;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <h2>Welcome, <span id="username">User</span></h2>
+        <p>Email: <span id="useremail"></span></p>
+
+        <div class="products">
+            <h3>Your Products</h3>
+            <div id="userProducts">Loading...</div>
+        </div>
+
+        <div class="cart">
+            <h3>Your Cart</h3>
+            <div id="cartItems">Loading...</div>
+        </div>
+
+        <button id="logoutButton" class="logout-btn">Logout</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    if (!user) {
+        window.location.href = '/login.html';  // ❌ User not logged in, redirect to login
+        return;
+    }
+
+    document.getElementById('username').textContent = user.name;
+
+    // ✅ Fetch user data from server
+    fetch(`http://localhost:5000/profile?userId=${user._id}`)
+        .then(response => response.json())
+        .then(userData => {
+            displayProducts(userData.products, 'userProducts');
+            displayProducts(userData.cart, 'cartItems');
+        })
+        .catch(error => console.error("❌ Profile Fetch Error:", error));
+});
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            document.getElementById('username').textContent = user.name;
+            document.getElementById('useremail').textContent = user.email;
+
+            // Fetch User Data
+            const response = await fetch(`http://localhost:5000/profile?userId=${user._id}`);
+            const userData = await response.json();
+            
+            // Display products & cart items
+            displayProducts(userData.products, 'userProducts');
+            displayProducts(userData.cart, 'cartItems');
+        });
+
+        function displayProducts(products, containerId) {
+            const container = document.getElementById(containerId);
+            if (products.length === 0) {
+                container.innerHTML = "<p>No items found</p>";
+                return;
+            }
+            container.innerHTML = products.map(p => `<div>${p.name} - $${p.price}</div>`).join('');
+        }
+
+        // Logout Function
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        });
+    </script>
+
+</body>
+</html>

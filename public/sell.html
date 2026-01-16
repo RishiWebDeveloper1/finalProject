@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Form</title>
+  <link rel="stylesheet" href="seller.css">
+</head>
+<body>
+  <div class="form-container">
+    <h2>Seller Form</h2>
+    
+    <!-- Status Messages -->
+    <div id="statusMessage" class="message hidden"></div>
+    
+    <form id="sellerForm">
+      <!-- Category -->
+      <div class="form-group">
+        <label for="category">Category*</label>
+        <select id="category" name="category" required>
+          <option value="" disabled selected>Select a category</option>
+          <option value="electronics">Electronics</option>
+          <option value="fashion">Fashion</option>
+          <option value="footwear">Footwear</option>
+          <option value="books">Books</option>
+          <option value="watches">Watches</option>
+          <option value="sports">Sports</option>
+        </select>
+      </div>
+
+      <!-- Product Name -->
+      <div class="form-group">
+        <label for="name">Product Name*</label>
+        <input type="text" id="name" name="name" placeholder="Enter product name" required>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description*</label>
+        <textarea id="description" name="description" rows="4" placeholder="Enter product description" required></textarea>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label for="price">Price (₹)*</label>
+        <input type="number" id="price" name="price" min="0.01" step="0.01" placeholder="Enter product price" required>
+      </div>
+
+      <!-- Product Image -->
+      <div class="form-group">
+        <label for="productimage">Product Image*</label>
+        <input type="file" id="productimage" name="productimage" accept="image/jpeg,image/png,image/gif" required>
+        <small>Upload a clear image of your product (JPEG, PNG, GIF only).</small>
+        <p id="fileName" class="file-name"></p>
+        <div id="imagePreview" class="image-preview"></div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-group">
+        <button type="submit" id="submitButton">Add Product</button>
+      </div>
+    </form>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button id="loginButton" class="secondary-button">Login</button>
+      <button id="startSelling" class="primary-button">Start Selling</button>
+    </div>
+  </div>
+
+  <script src="seller.js"></script>
+  
+  <!-- Add this CSS if you don't already have these styles -->
+  <style>
+    .hidden { display: none; }
+    .message { 
+      padding: 10px; 
+      margin-bottom: 15px; 
+      border-radius: 4px; 
+    }
+    .error { background-color: #ffebee; color: #c62828; }
+    .success { background-color: #e8f5e9; color: #2e7d32; }
+    .file-name { 
+      font-size: 12px; 
+      color: #2e7d32; 
+      margin-top: 5px; 
+    }
+    .image-preview {
+      max-width: 200px;
+      max-height: 200px;
+      margin-top: 10px;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #2196F3;
+      color: white;
+    }
+  </style>
+
+  <!-- Add this script for image preview -->
+  <script>
+    document.getElementById('productimage').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Show file name
+        document.getElementById('fileName').textContent = file.name;
+        
+        // Show image preview
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('imagePreview');
+          preview.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-width: 100%; max-height: 200px;">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>

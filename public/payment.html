@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.2rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .payment-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .order-summary {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .summary-item.total {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .payment-options {
+            margin-bottom: 30px;
+        }
+        
+        h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        .payment-method {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .payment-method:hover {
+            border-color: #3498db;
+            background-color: #f8f9fa;
+        }
+        
+        .payment-method.selected {
+            border-color: #3498db;
+            background-color: #ebf5fb;
+        }
+        
+        .payment-method-header {
+            display: flex;
+            align-items: center;
+        }
+        
+        .payment-method-header i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .payment-method-body {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+            display: none;
+        }
+        
+        .payment-method.selected .payment-method-body {
+            display: block;
+        }
+        
+        .upi-details {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .upi-qr {
+            width: 150px;
+            height: 150px;
+            background-color: #f1f3f6;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            text-align: center;
+            border: 1px dashed #ddd;
+        }
+        
+        .upi-info {
+            flex: 1;
+        }
+        
+        .upi-id {
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: #f1f3f6;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .bank-details {
+            margin-bottom: 15px;
+        }
+        
+        .bank-detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .bank-detail-label {
+            font-weight: 600;
+            width: 150px;
+        }
+        
+        .customer-form {
+            margin-top: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .submit-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+        
+        .back-to-cart {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .back-to-cart a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .back-to-cart a:hover {
+            text-decoration: underline;
+        }
+        
+        .payment-success {
+            text-align: center;
+            padding: 30px 20px;
+            display: none;
+        }
+        
+        .payment-success i {
+            font-size: 5rem;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+        
+        .payment-success h3 {
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .payment-success p {
+            margin-bottom: 10px;
+            color: #7f8c8d;
+        }
+        
+        .order-id {
+            font-family: monospace;
+            background-color: #f1f3f6;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .success-buttons {
+            margin-top: 30px;
+        }
+        
+        .success-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .success-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h2>Complete Your Payment</h2>
+    
+    <div id="payment-container" class="payment-container">
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-item">
+                <span>Number of Items</span>
+                <span id="item-count">0</span>
+            </div>
+            <div class="summary-item total">
+                <span>Total Amount</span>
+                <span id="total-amount">₹0</span>
+            </div>
+        </div>
+        
+        <div class="payment-options">
+            <h3>Choose Payment Method</h3>
+            
+            <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                <div class="payment-method-header">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>UPI Payment</span>
+                </div>
+                <div class="payment-method-body" id="upi-body">
+                    <div class="upi-details">
+                        <div class="upi-qr">
+                            QR Code<br>
+                            (This would be your actual UPI QR code)
+                        </div>
+                        <div class="upi-info">
+                            <p>Scan the QR code or use the UPI ID below:</p>
+                            <div class="upi-id">
+                                yourshop@upi
+                                <button class="copy-btn" onclick="copyToClipboard('yourshop@upi')">
+                                    <i class="far fa-copy"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-method" onclick="selectPaymentMethod('bank')">
+                <div class="payment-method-header">
+                    <i class="fas fa-university"></i>
+                    <span>Bank Transfer</span>
+                </div>
+                <div class="payment-method-body" id="bank-body">
+                    <div class="bank-details">
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">Account Name:</span>
+                            <span>Your Shop Name</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">Account Number:</span>
+                            <span>1234567890</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">IFSC Code:</span>
+                            <span>BANK0001234</span>
+                        </div>
+                        <div class="bank-detail-row">
+                            <span class="bank-detail-label">Bank:</span>
+                            <span>Your Bank Name</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-method" onclick="selectPaymentMethod('cod')">
+                <div class="payment-method-header">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>Cash on Delivery</span>
+                </div>
+                <div class="payment-method-body" id="cod-body">
+                    <p>Pay with cash when your order is delivered.</p>
+                    <p>Additional COD charges may apply.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="customer-form">
+            <h3>Delivery Information</h3>
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter your phone number" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email (Optional)</label>
+                <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+                <label for="address">Delivery Address</label>
+                <textarea id="address" placeholder="Enter your complete delivery address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="payment-ref">Payment Reference (For UPI/Bank Transfer)</label>
+                <input type="text" id="payment-ref" placeholder="Enter UPI reference ID or transaction ID if applicable">
+            </div>
+            
+            <button class="submit-btn" onclick="placeOrder()">Place Order</button>
+        </div>
+    </div>
+    
+    <!-- Payment Success Message -->
+    <div id="payment-success" class="payment-success">
+        <i class="fas fa-check-circle"></i>
+        <h3>Order Placed Successfully!</h3>
+        <p>Your order has been received and is being processed.</p>
+        <p>Order ID: <span id="order-id" class="order-id">ORD12345</span></p>
+        <p>We'll contact you shortly to confirm your order.</p>
+        
+        <div class="success-buttons">
+            <a href="index.html" class="success-btn">Continue Shopping</a>
+        </div>
+    </div>
+    
+    <div class="back-to-cart">
+        <a href="cart.html"><i class="fas fa-arrow-left"></i> Back to Cart</a>
+    </div>
+    
+    <script>
+        let selectedPaymentMethod = '';
+        let orderAmount = 0;
+        
+        // Parse order data from URL
+        function parseOrderData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderParam = urlParams.get('order');
+            
+            if (orderParam) {
+                try {
+                    const orderData = JSON.parse(decodeURIComponent(orderParam));
+                    
+                    // Update the order summary
+                    document.getElementById('item-count').textContent = orderData.items;
+                    document.getElementById('total-amount').textContent = `₹${orderData.amount.toLocaleString()}`;
+                    
+                    // Store the order amount for later use
+                    orderAmount = orderData.amount;
+                } catch (error) {
+                    console.error('Error parsing order data:', error);
+                }
+            } else {
+                // Redirect back to cart if no order data
+                window.location.href = 'cart.html';
+            }
+        }
+        
+        // Select payment method
+        function selectPaymentMethod(method) {
+            selectedPaymentMethod = method;
+            
+            // Remove 'selected' class from all payment methods
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            paymentMethods.forEach(method => {
+                method.classList.remove('selected');
+            });
+            
+            // Add 'selected' class to the chosen method
+            const selectedMethod = document.querySelector(`.payment-method:nth-child(${getMethodIndex(method)})`);
+            if (selectedMethod) {
+                selectedMethod.classList.add('selected');
+            }
+        }
+        
+        // Get method index (used to find the correct payment method element)
+        function getMethodIndex(method) {
+            switch (method) {
+                case 'upi': return 1;
+                case 'bank': return 2;
+                case 'cod': return 3;
+                default: return 1;
+            }
+        }
+        
+        // Copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+        
+        // Place order
+        function placeOrder() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const paymentRef = document.getElementById('payment-ref').value;
+            
+            // Validate form
+            if (!name || !phone || !address) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Validate payment method selection
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            // Validate payment reference for UPI and Bank Transfer
+            if ((selectedPaymentMethod === 'upi' || selectedPaymentMethod === 'bank') && !paymentRef) {
+                alert('Please enter the payment reference ID');
+                return;
+            }
+            
+            // Create order object
+            const order = {
+                id: generateOrderId(),
+                name: name,
+                phone: phone,
+                email: email,
+                address: address,
+                paymentMethod: selectedPaymentMethod,
+                paymentRef: paymentRef,
+                amount: orderAmount,
+                date: new Date().toISOString()
+            };
+            
+            // In a real application, you would send this data to your server
+            // Here we'll just simulate a successful order
+            saveOrder(order);
+            showOrderSuccess(order.id);
+        }
+        
+        // Generate a random order ID
+        function generateOrderId() {
+            const prefix = 'ORD';
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            return `${prefix}${randomNum}`;
+        }
+        
+        // Save order to localStorage (for demo purposes)
+        function saveOrder(order) {
+            // Get existing orders or initialize empty array
+            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+            
+            // Add new order
+            orders.push(order);
+            
+            // Save back to localStorage
+            localStorage.setItem('orders', JSON.stringify(orders));
+        }
+        
+        // Show order success screen
+        function showOrderSuccess(orderId) {
+            // Hide payment container
+            document.getElementById('payment-container').style.display = 'none';
+            
+            // Set order ID in success message
+            document.getElementById('order-id').textContent = orderId;
+            
+            // Show success message
+            document.getElementById('payment-success').style.display = 'block';
+        }
+        
+        // Initialize the page
+        window.onload = function() {
+            parseOrderData();
+            
+            // Select UPI as default payment method
+            selectPaymentMethod('upi');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Search Component</title>
+    <link rel="icon" type="image/x-icon" href="favicon_io/favicon.ico">
+
+    <style>
+        /* Global Search Component Styles */
+        .global-search-container {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
+            position: relative;
+        }
+        
+        .global-search-form {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .global-search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        
+        .global-search-input:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .global-search-button {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s ease;
+        }
+        
+        .global-search-button:hover {
+            background: #e0e0e0;
+        }
+        
+        .global-search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .global-search-results.show {
+            display: block;
+        }
+        
+        .global-search-result-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .global-search-result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .global-search-result-item:hover {
+            background: #f9f9f9;
+        }
+        
+        .global-search-result-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+        
+        .global-search-result-content {
+            flex: 1;
+        }
+        
+        .global-search-result-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .global-search-result-description {
+            color: #666;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .global-search-result-price {
+            font-weight: bold;
+            color: #333;
+            margin-top: 3px;
+        }
+        
+        .global-search-no-results {
+            padding: 15px;
+            text-align: center;
+            color: #666;
+        }
+        
+        .global-search-all-results {
+            padding: 12px 15px;
+            text-align: center;
+            background: #f5f5f5;
+            border-top: 1px solid #eee;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .global-search-all-results:hover {
+            background: #eee;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .global-search-container {
+                padding: 0 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .global-search-form {
+                flex-direction: column;
+            }
+            
+            .global-search-button {
+                width: 100%;
+            }
+        }
+
+        /* Basic page styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto 30px auto;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer {
+            max-width: 1200px;
+            margin: 30px auto 0 auto;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>XCHANGE</h1>
+        <!-- Global Search Component HTML -->
+        <div class="global-search-container">
+            <form class="global-search-form" id="globalSearchForm">
+                <input type="text" id="globalSearchInput" class="global-search-input" placeholder="Search products..." autocomplete="off">
+                <button type="submit" id="globalSearchButton" class="global-search-button">Search</button>
+            </form>
+            <div class="global-search-results" id="globalSearchResults"></div>
+        </div>
+    </header>
+    
+    <div class="content">
+        <p>Use the search box above to find products in our catalog.</p>
+        <div id="status">Loading products...</div>
+        <!-- Your other content goes here -->
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 XCHANGE. All rights reserved.</p>
+    </footer>
+
+    <script>
+        /**
+         * Global Search Component
+         * 
+         * This script creates a reusable search component that integrates with
+         * your existing product database and can be used across all pages.
+         */
+        class GlobalSearch {
+            constructor(options = {}) {
+                // Elements
+                this.form = document.getElementById('globalSearchForm');
+                this.input = document.getElementById('globalSearchInput');
+                this.button = document.getElementById('globalSearchButton');
+                this.resultsContainer = document.getElementById('globalSearchResults');
+                this.statusElement = document.getElementById('status');
+                
+                // Options with defaults
+                this.options = {
+                    apiEndpoint: options.apiEndpoint || '/api/products',
+                    searchParam: options.searchParam || 'q',
+                    minChars: options.minChars || 2,
+                    debounceTime: options.debounceTime || 300,
+                    resultLimit: options.resultLimit || 5,
+                    searchResultsPage: options.searchResultsPage || '/products',
+                    productPageUrl: options.productPageUrl || 'product.html',
+                    searchInFields: options.searchInFields || ['name', 'description'],
+                    placeholderImage: options.placeholderImage || 'https://via.placeholder.com/50',
+                    onSelect: options.onSelect || this.defaultOnSelect.bind(this)
+                };
+                
+                // State
+                this.searchTimeoutId = null;
+                this.lastQuery = '';
+                this.searchResults = [];
+                this.allProducts = []; // Will store all products once fetched
+                this.isProductsLoaded = false;
+                
+                // Initialize
+                this.init();
+            }
+            
+            init() {
+                // Form submit handler
+                this.form.addEventListener('submit', this.handleFormSubmit.bind(this));
+                
+                // Input handlers
+                this.input.addEventListener('input', this.handleInput.bind(this));
+                this.input.addEventListener('focus', () => {
+                    if (this.input.value.trim().length >= this.options.minChars) {
+                        this.showResults();
+                    }
+                });
+                
+                // Close results when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.form.contains(e.target)) {
+                        this.hideResults();
+                    }
+                });
+                
+                // Load products if not already available
+                this.loadProducts();
+            }
+            
+            async loadProducts() {
+                // First, check if products are already loaded in the global scope
+                if (window.allProducts && window.allProducts.length > 0) {
+                    this.allProducts = window.allProducts;
+                    this.isProductsLoaded = true;
+                    this.updateStatus(`Loaded ${this.allProducts.length} products`);
+                    return;
+                }
+                
+                // If not, try to load from localStorage for faster subsequent loads
+                const cachedProducts = localStorage.getItem('cachedProducts');
+                if (cachedProducts) {
+                    try {
+                        this.allProducts = JSON.parse(cachedProducts);
+                        this.isProductsLoaded = true;
+                        this.updateStatus(`Loaded ${this.allProducts.length} products from cache`);
+                        // Still fetch in background to update cache
+                        this.fetchProductsFromAPI(true);
+                        return;
+                    } catch (e) {
+                        console.error('Error parsing cached products:', e);
+                        this.updateStatus('Error loading cached products');
+                    }
+                }
+                
+                // If no local cache, fetch from API
+                this.updateStatus('Fetching products...');
+                await this.fetchProductsFromAPI();
+            }
+            
+            async fetchProductsFromAPI(updateCacheOnly = false) {
+                try {
+                    // For demo purposes, we'll use mock data instead of fetching
+                    // Comment out the actual fetch and use the mock data directly
+                    /*
+                    const response = await fetch(this.options.apiEndpoint);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch products');
+                    }
+                    
+                    const products = await response.json();
+                    */
+                    
+                    // Simulate API delay
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    // Use mock data directly
+                    const products = [
+                        {
+                            id: 1,
+                            name: "Vintage Desk Lamp",
+                            description: "Elegant brass desk lamp in working condition",
+                            price: 1200,
+                            imageUrl: "https://via.placeholder.com/300/FFD700/000000?text=Lamp",
+                            age: "3 years"
+                        },
+                        {
+                            id: 2,
+                            name: "Leather Office Chair",
+                            description: "Comfortable executive chair with minimal wear",
+                            price: 3500,
+                            imageUrl: "https://via.placeholder.com/300/8B4513/FFFFFF?text=Chair",
+                            age: "2 years"
+                        },
+                        {
+                            id: 3,
+                            name: "Coffee Table Book",
+                            description: "Art history book in excellent condition",
+                            price: 800,
+                            imageUrl: "https://via.placeholder.com/300/1E90FF/FFFFFF?text=Book",
+                            age: "1 year"
+                        },
+                        {
+                            id: 4,
+                            name: "Wireless Headphones",
+                            description: "Sony WH-1000XM4 with noise cancellation",
+                            price: 15000,
+                            imageUrl: "https://via.placeholder.com/300/000000/FFFFFF?text=Headphones",
+                            age: "6 months"
+                        },
+                        {
+                            id: 5,
+                            name: "Mountain Bike",
+                            description: "Trek mountain bike, barely used",
+                            price: 22000,
+                            imageUrl: "https://via.placeholder.com/300/32CD32/FFFFFF?text=Bike",
+                            age: "1 year"
+                        },
+                        {
+                            id: 6,
+                            name: "Smartphone",
+                            description: "iPhone 12, 128GB, no scratches",
+                            price: 35000,
+                            imageUrl: "https://via.placeholder.com/300/C0C0C0/000000?text=iPhone",
+                            age: "1 year"
+                        },
+                        {
+                            id: 7,
+                            name: "Fitness Watch",
+                            description: "Garmin Forerunner with all accessories",
+                            price: 12000,
+                            imageUrl: "https://via.placeholder.com/300/000000/00FF00?text=Watch",
+                            age: "8 months"
+                        }
+                    ];
+                    
+                    // Update cache
+                    localStorage.setItem('cachedProducts', JSON.stringify(products));
+                    
+                    // Only update active products if not just refreshing cache
+                    if (!updateCacheOnly) {
+                        this.allProducts = products;
+                        this.isProductsLoaded = true;
+                        this.updateStatus(`Loaded ${this.allProducts.length} products`);
+                        
+                        // Also update global scope if it exists
+                        if (typeof window.allProducts !== 'undefined') {
+                            window.allProducts = products;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching products:', error);
+                    this.updateStatus('Error loading products');
+                    
+                    // If we have no products data at all, show an error
+                    if (!this.isProductsLoaded) {
+                        console.warn('No product data available for search');
+                    }
+                }
+            }
+            
+            updateStatus(message) {
+                if (this.statusElement) {
+                    this.statusElement.textContent = message;
+                }
+                console.log(message);
+            }
+            
+            handleFormSubmit(e) {
+                e.preventDefault();
+                const query = this.input.value.trim();
+                
+                if (query.length >= this.options.minChars) {
+                    this.navigateToSearchResults(query);
+                }
+            }
+            
+            handleInput(e) {
+                const query = this.input.value.trim();
+                
+                // Clear previous timeout
+                if (this.searchTimeoutId) {
+                    clearTimeout(this.searchTimeoutId);
+                }
+                
+                if (query.length >= this.options.minChars) {
+                    // Debounce search to avoid excessive processing
+                    this.searchTimeoutId = setTimeout(() => {
+                        if (query !== this.lastQuery) {
+                            this.lastQuery = query;
+                            this.performSearch(query);
+                        }
+                    }, this.options.debounceTime);
+                } else {
+                    this.hideResults();
+                }
+            }
+            
+            performSearch(query) {
+                // Ensure products are loaded
+                if (!this.isProductsLoaded) {
+                    this.renderError('Loading products...');
+                    // Try to load products again
+                    this.loadProducts().then(() => {
+                        if (this.isProductsLoaded) {
+                            this.performSearch(query);
+                        }
+                    });
+                    return;
+                }
+                
+                console.log(`Performing search for: "${query}"`);
+                console.log(`Available products:`, this.allProducts);
+                
+                // Perform client-side search
+                this.searchResults = this.searchProducts(query);
+                console.log(`Search results:`, this.searchResults);
+                this.renderResults(query);
+            }
+            
+            searchProducts(query) {
+                query = query.toLowerCase();
+                
+                return this.allProducts.filter(product => {
+                    return this.options.searchInFields.some(field => {
+                        const value = product[field];
+                        return value && String(value).toLowerCase().includes(query);
+                    });
+                });
+            }
+            
+            renderResults(query) {
+                if (this.searchResults.length === 0) {
+                    this.resultsContainer.innerHTML = `
+                        <div class="global-search-no-results">No products found for "${query}"</div>
+                    `;
+                } else {
+                    // Show a limited number of results
+                    const limitedResults = this.searchResults.slice(0, this.options.resultLimit);
+                    const hasMoreResults = this.searchResults.length > this.options.resultLimit;
+                    
+                    let html = limitedResults.map((product, index) => `
+                        <div class="global-search-result-item" data-id="${product.id}" data-index="${index}">
+                            <img src="${product.imageUrl || this.options.placeholderImage}" 
+                                alt="${product.name}" 
+                                class="global-search-result-image"
+                                onerror="this.src='${this.options.placeholderImage}'">
+                            <div class="global-search-result-content">
+                                <div class="global-search-result-title">${product.name}</div>
+                                ${product.description ? 
+                                    `<div class="global-search-result-description">${product.description}</div>` : ''}
+                                <div class="global-search-result-price">₹ ${product.price}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Add "See all results" link if there are more
+                    if (hasMoreResults) {
+                        html += `
+                            <div class="global-search-all-results" id="seeAllResults">
+                                See all ${this.searchResults.length} results for "${query}"
+                            </div>
+                        `;
+                    }
+                    
+                    this.resultsContainer.innerHTML = html;
+                    
+                    // Add click handlers to results
+                    const resultItems = this.resultsContainer.querySelectorAll('.global-search-result-item');
+                    resultItems.forEach(item => {
+                        item.addEventListener('click', () => {
+                            const productId = item.dataset.id;
+                            const index = parseInt(item.dataset.index);
+                            this.options.onSelect(this.searchResults[index]);
+                        });
+                    });
+                    
+                    // Add click handler to "See all results"
+                    const seeAllButton = document.getElementById('seeAllResults');
+                    if (seeAllButton) {
+                        seeAllButton.addEventListener('click', () => {
+                            this.navigateToSearchResults(query);
+                        });
+                    }
+                }
+                
+                this.showResults();
+            }
+            
+            renderError(message) {
+                this.resultsContainer.innerHTML = `
+                    <div class="global-search-no-results">${message}</div>
+                `;
+                this.showResults();
+            }
+            
+            showResults() {
+                this.resultsContainer.classList.add('show');
+            }
+            
+            hideResults() {
+                this.resultsContainer.classList.remove('show');
+            }
+            
+            navigateToSearchResults(query) {
+                // Construct URL based on your existing implementation
+                const url = `${this.options.searchResultsPage}?${this.options.searchParam}=${encodeURIComponent(query)}`;
+                window.location.href = url;
+            }
+            
+            defaultOnSelect(product) {
+                // Navigate to the product page with product ID as a URL parameter
+                if (product && product.id) {
+                    // Use product.html and pass the product ID as a URL parameter
+                    window.location.href = `${this.options.productPageUrl}?id=${product.id}`;
+                } else {
+                    console.error('Invalid product data:', product);
+                }
+            }
+            
+            // Public method to update options
+            updateOptions(newOptions) {
+                this.options = {...this.options, ...newOptions};
+            }
+            
+            // Public method to manually set product data
+            setProductData(products) {
+                this.allProducts = products;
+                this.isProductsLoaded = true;
+                this.updateStatus(`Loaded ${this.allProducts.length} products`);
+            }
+        }
+
+        // Initialize the global search component when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Create the global search instance
+            window.globalSearch = new GlobalSearch({
+                // Configuration settings - adjust these based on your actual endpoints and URLs
+                apiEndpoint: '/api/products',
+                searchResultsPage: 'products.html',
+                productPageUrl: 'product.html',
+                minChars: 2,
+                resultLimit: 5,
+                placeholderImage: 'https://via.placeholder.com/50',
+                searchInFields: ['name', 'description', 'age']
+            });
+            
+            // Don't set mock data here as we're now handling it in the fetchProductsFromAPI method
+            // This allows for a more realistic flow and debugging
+        });
+    </script>
+</body>
+</html>

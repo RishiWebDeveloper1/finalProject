@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Header and Footer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        /* Navigation Styling */
+        nav {
+            background-image: linear-gradient(220deg, aqua, rgb(149, 255, 255), rgb(187, 255, 255), white);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            height: 3px;
+            width: 25px;
+            background-color: black;
+            margin: 4px 0;
+            transition: 0.4s;
+        }
+
+        .route-link-box,
+        .login-box-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .route-link-box a,
+        .login-box-container a {
+            color: rgb(10, 10, 10);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 8px 15px;
+            border: 2px solid transparent;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .route-link-box a:hover,
+        .login-box-container a:hover {
+            background-color: #f8b400;
+            color: #222;
+        }
+
+        /* Profile Image Styling */
+        .profile-container {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 70px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 10px 20px;
+            color: black;
+            text-decoration: none;
+        }
+
+        .profile-dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #2c2c2c;
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-section {
+            flex: 1 1 300px;
+            margin: 10px;
+        }
+
+        .footer-section h4 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #f8b400;
+        }
+
+        .footer-section p, 
+        .footer-section ul {
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #f8b400;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 10px 20px;
+            border-top: 1px solid #444;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        /* Responsive Breakpoints */
+        @media screen and (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .route-link-box,
+            .login-box-container {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                background-image: linear-gradient(220deg, aqua, rgb(149, 255, 255), rgb(187, 255, 255), white);
+                padding: 20px;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+                position: relative;
+            }
+
+            .route-link-box a,
+            .login-box-container a {
+                margin: 10px 0;
+                text-align: center;
+            }
+
+            .route-link-box.active,
+            .login-box-container.active {
+                display: flex;
+            }
+
+            .footer-container {
+                flex-direction: column;
+            }
+
+            .footer-section {
+                flex: 1 1 100%;
+                margin: 10px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo-box">
+                <span>X</span>
+                <span>C</span>
+                <span>H</span>
+                <span>A</span>
+                <span>N</span>
+                <span>G</span>
+                <span>E</span>
+            </div>
+
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+
+            <div class="route-link-box">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="https://tally.so/r/w2l8Jg">Contact</a>
+            </div>
+            
+            <div class="login-box-container">
+                <a href="login.html">Login</a>
+                <a href="signup.html">Register</a>
+            </div>
+
+            <div class="profile-container">
+                <img src="images/account.png" alt="Profile" class="profile-image">
+                <div class="profile-dropdown">
+                    <a href="profile.html">My Profile</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="#" id="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <!-- Your page content goes here -->
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>We are a platform that connects buyers and sellers, promoting affordability and sustainability.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="https://tally.so/r/w2l8Jg">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>Email: support@exchange.com</p>
+                <p>Address: online</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Your Website. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Authentication state
+        let isLoggedIn = false;
+
+        // Function to update authentication view
+        function updateAuthView() {
+            const loginContainer = document.querySelector('.login-box-container');
+            const profileContainer = document.querySelector('.profile-container');
+            
+            if (isLoggedIn) {
+                loginContainer.style.display = 'none';
+                profileContainer.style.display = 'flex';
+            } else {
+                loginContainer.style.display = 'flex';
+                profileContainer.style.display = 'none';
+            }
+        }
+          // Hamburger Menu Toggle
+          const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+
+        hamburger.addEventListener('click', () => {
+            // Toggle active class on hamburger and nav-links
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked (optional)
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside (optional)
+        document.addEventListener('click', (event) => {
+            const isClickInsideNavbar = document.querySelector('.nav-container').contains(event.target);
+            
+            if (!isClickInsideNavbar) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Toggle menu on mobile
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.route-link-box').classList.toggle('active');
+            document.querySelector('.login-box-container').classList.toggle('active');
+        });
+
+        // Profile image dropdown toggle
+        const profileImage = document.querySelector('.profile-image');
+        const profileDropdown = document.querySelector('.profile-dropdown');
+
+        profileImage.addEventListener('click', function() {
+            profileDropdown.classList.toggle('active');
+        });
+
+        // Logout functionality
+        const logoutBtn = document.getElementById('logout-btn');
+        logoutBtn.addEventListener('click', function() {
+            isLoggedIn = false;
+            updateAuthView();
+            // Add your actual logout logic here
+        });
+
+        // Simulated login (for demonstration)
+        function simulateLogin() {
+            isLoggedIn = true;
+            updateAuthView();
+        }
+
+        // Initial view update
+        updateAuthView();
+    </script>
+</body>
+</html>
