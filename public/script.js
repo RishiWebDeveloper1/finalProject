@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // async function checkLogin() {
 //     try {
-//         const response = await fetch("http://localhost:5000/auth/status");
+//         const response = await fetch("https://online-exchange-platform.vercel.app/auth/status");
 //         const data = await response.json();
 
 //         if (data.loggedIn) {
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function checkLogin() {
     try {
-        const response = await fetch("http://localhost:5000/auth/status");
+        const response = await fetch("https://online-exchange-platform.vercel.app/auth/status");
         const data = await response.json();
 
         if (data.loggedIn) {

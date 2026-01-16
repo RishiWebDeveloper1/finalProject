@@ -119,9 +119,10 @@
             }
 
             // Fetch user data from server
-            fetch(`http://localhost:5000/profile?userId=${user._id}`)
+            fetch(`https://online-exchange-platform.vercel.app/profile?userId=${user._id}`)
                 .then(response => response.json())
                 .then(userData => {
+                    
                     // Display products & cart items if they exist in the response
                     if (userData.products) {
                         displayProducts(userData.products, 'userProducts');

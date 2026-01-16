@@ -9,7 +9,7 @@ async function register() {
     }
 
     try {
-        const response = await fetch("http://localhost:5000/register", { 
+        const response = await fetch("https://online-exchange-platform.vercel.app/register", { 
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, email, password })
@@ -31,5 +31,5 @@ async function register() {
 
 // ✅ Google Signup/Login Function
 function googleLogin() {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://online-exchange-platform.vercel.app/auth/google";
 }

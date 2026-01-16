@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.log("Sending data to server...");
                 
                 // Send to server
-                const response = await fetch('http://localhost:5000/seller/add-product', {
+                const response = await fetch('https://online-exchange-platform.vercel.app/seller/add-product', {
                     method: 'POST',
                     body: formData,
                     // Important: Don't set Content-Type header

@@ -39,7 +39,7 @@
 
 
 //     // ✅ Fetch user data from server
-//     fetch(`http://localhost:5000/profile?userId=${user._id}`)
+//     fetch(`https://online-exchange-platform.vercel.app/profile?userId=${user._id}`)
 //         .then(response => response.json())
 //         .then(userData => {
 //             displayProducts(userData.products, 'userProducts');
@@ -59,7 +59,7 @@
 //             document.getElementById('useremail').textContent = user.email;
 
 //             // Fetch User Data
-//             const response = await fetch(`http://localhost:5000/profile?userId=${user._id}`);
+//             const response = await fetch(`https://online-exchange-platform.vercel.app/profile?userId=${user._id}`);
 //             const userData = await response.json();
             
 //             // Display products & cart items

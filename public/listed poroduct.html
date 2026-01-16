@@ -52,7 +52,7 @@
     //             `;
                 
     //             // API call to get seller's products from MongoDB
-    //             const response = await fetch(`http://localhost:5000/api/products/seller/${user._id}`, {
+    //             const response = await fetch(`https://online-exchange-platform.vercel.app/api/products/seller/${user._id}`, {
     //                 headers: {
     //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
     //                 }
@@ -152,7 +152,7 @@
     //             currentProductId = productId;
                 
     //             // Fetch product details from MongoDB
-    //             const response = await fetch(`http://localhost:5000/api/products/${productId}`, {
+    //             const response = await fetch(`https://online-exchange-platform.vercel.app/api/products/${productId}`, {
     //                 headers: {
     //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
     //                 }
@@ -206,11 +206,11 @@
                 
     //             if (currentProductId) {
     //                 // Edit existing product
-    //                 url = `http://localhost:5000/api/products/${currentProductId}`;
+    //                 url = `https://online-exchange-platform.vercel.app/api/products/${currentProductId}`;
     //                 method = 'PUT';
     //             } else {
     //                 // Add new product
-    //                 url = 'http://localhost:5000/api/products';
+    //                 url = 'https://online-exchange-platform.vercel.app/api/products';
     //                 method = 'POST';
                     
     //                 // Add seller ID to form data
@@ -248,7 +248,7 @@
             
     //         try {
     //             // Send delete request to MongoDB
-    //             const response = await fetch(`http://localhost:5000/api/products/${currentProductId}`, {
+    //             const response = await fetch(`https://online-exchange-platform.vercel.app/api/products/${currentProductId}`, {
     //                 method: 'DELETE',
     //                 headers: {
     //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
