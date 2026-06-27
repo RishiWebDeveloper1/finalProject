@@ -13,12 +13,13 @@
     "mongoose": "^8.10.1",
     "multer": "^2.0.2",
     "node": "^23.8.0",
+    "nodemon": "^3.1.14",
     "openai": "^4.84.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "name": "abhinav-homepage-olx",
   "version": "1.0.0",
